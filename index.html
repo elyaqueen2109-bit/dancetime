@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Box 3 - Dance Time</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Nunito', 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 48px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+        .header { margin-bottom: 20px; }
+        .header h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3rem;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.08);
+            padding: 6px 24px;
+            border-radius: 40px;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 700;
+            margin-top: 10px;
+        }
+        .dice-display {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3rem;
+            color: #ffd200;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 32px;
+            padding: 40px 20px;
+            min-height: 10rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            margin: 20px 0;
+            letter-spacing: 1px;
+            line-height: 1.4;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .dice-display.rolling {
+            animation: diceRoll 0.5s ease infinite;
+        }
+        @keyframes diceRoll {
+            0% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(5deg) scale(1.05); }
+            50% { transform: rotate(-5deg) scale(1.1); }
+            75% { transform: rotate(5deg) scale(1.05); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+        .dice-display.dance-time {
+            color: #f472b6;
+            border-color: rgba(244, 114, 182, 0.4);
+            background: rgba(244, 114, 182, 0.1);
+            animation: pulseDance 0.8s infinite;
+        }
+        @keyframes pulseDance {
+            0% { box-shadow: 0 0 0 0 rgba(244, 114, 182, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(244, 114, 182, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(244, 114, 182, 0); }
+        }
+        .dice-display.countdown {
+            color: #ffd200;
+            font-size: 7rem;
+            font-family: 'Fredoka One', cursive;
+            font-weight: bold;
+            border-color: rgba(255, 210, 0, 0.6);
+            background: rgba(255, 210, 0, 0.1);
+            text-shadow: 0 0 30px rgba(255, 210, 0, 0.8), 0 0 60px rgba(255, 210, 0, 0.5);
+            animation: countdownPulse 0.6s ease infinite;
+        }
+        @keyframes countdownPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+        .btn {
+            border: none; padding: 16px 40px; border-radius: 60px; font-size: 1.3rem;
+            font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-flex; align-items: center; gap: 12px;
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn-gold {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            color: #1a1a2e;
+            box-shadow: 0 8px 30px rgba(247, 151, 30, 0.4);
+        }
+        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(247, 151, 30, 0.5); }
+        .btn-pink {
+            background: linear-gradient(135deg, #f472b6, #ec4899);
+            color: #fff;
+            box-shadow: 0 8px 30px rgba(244, 114, 182, 0.3);
+        }
+        .btn-pink:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(244, 114, 182, 0.4); }
+        .btn-pink:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+        .stop-btn {
+            background: #ef4444;
+            color: #fff;
+            box-shadow: 0 8px 30px rgba(239, 68, 68, 0.3);
+        }
+        .stop-btn:hover { transform: translateY(-3px); }
+        .btn-group { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin: 20px 0; }
+        .footer-note { text-align: center; margin-top: 25px; color: rgba(255, 255, 255, 0.25); font-size: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.04); padding-top: 18px; }
+        
+        /* Стиль для видео с бананом */
+        .banana-video {
+            display: none;
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            border-radius: 24px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            border: 3px solid rgba(244, 114, 182, 0.5);
+        }
+        .banana-video.active {
+            display: block;
+        }
+        
+        @media (max-width: 700px) {
+            .header h1 { font-size: 2.2rem; }
+            .dice-display { font-size: 2rem; padding: 25px 16px; }
+            .dice-display.countdown { font-size: 5rem; }
+            .btn { padding: 12px 28px; font-size: 1.1rem; }
+            .banana-video { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>🎵 Dance Time!</h1>
+            <span class="subtitle">🌟 Roll the dice and move! 🌟</span>
+        </div>
+
+        <div class="dice-display" id="diceDisplay">
+            🎲 Roll the dice!
+        </div>
+
+        <!-- Видео с бананом -->
+        <video id="bananaVideo" class="banana-video" muted playsinline loop>
+            <source src="banana_dance.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <div class="btn-group">
+            <button class="btn btn-gold" id="rollDiceBtn">🎲 Roll</button>
+            <button class="btn stop-btn" id="stopBtn" style="display: none;">⏹️ Stop</button>
+        </div>
+
+        <div class="footer-note">✨ Listen to the command and do it! ✨</div>
+    </div>
+
+    <script>
+        // ================================================================
+        //  ДАННЫЕ
+        // ================================================================
+        const commands = [
+            { text: 'Stand up!', emoji: '🧍', sound: 'stand' },
+            { text: 'Touch your nose!', emoji: '👃', sound: 'boop' },
+            { text: 'Clap your hands!', emoji: '👏', sound: 'clap' },
+            { text: 'Turn around!', emoji: '🔄', sound: 'whoosh' },
+            { text: 'Jump three times!', emoji: '🦘', sound: 'jump' },
+            { text: 'Touch your toes!', emoji: '🦶', sound: 'boop' },
+            { text: 'Wave your hands!', emoji: '👋', sound: 'wave' },
+            { text: 'Sit down!', emoji: '🪑', sound: 'sit' }
+        ];
+
+        let isRolling = false;
+        let isDancing = false;
+        let speechSynth = window.speechSynthesis;
+        let audioContext = null;
+        let audioPlayer = null;
+        let danceInterval = null;
+        let danceTimeout = null;
+        let videoReverseTimeout = null;
+        let videoEndTimeout = null;
+        let isVideoPlayingForward = true;
+        let lastCommandIndex = -1;
+        let commandRepeatCount = 0;
+
+        const diceDisplay = document.getElementById('diceDisplay');
+        const rollDiceBtn = document.getElementById('rollDiceBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const bananaVideo = document.getElementById('bananaVideo');
+
+        // ================================================================
+        //  ЗВУКОВЫЕ ЭФФЕКТЫ ДЛЯ ЗАДАНИЙ
+        // ================================================================
+        function playCommandSound(soundType) {
+            try {
+                const ctx = new(window.AudioContext || window.webkitAudioContext)();
+                
+                switch(soundType) {
+                    case 'boop':
+                        const oscB = ctx.createOscillator();
+                        const gainB = ctx.createGain();
+                        oscB.connect(gainB);
+                        gainB.connect(ctx.destination);
+                        oscB.type = 'sine';
+                        oscB.frequency.value = 600;
+                        gainB.gain.value = 0.3;
+                        gainB.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+                        oscB.start(ctx.currentTime);
+                        oscB.stop(ctx.currentTime + 0.2);
+                        break;
+                        
+                    case 'clap':
+                        for (let i = 0; i < 3; i++) {
+                            const oscC = ctx.createOscillator();
+                            const gainC = ctx.createGain();
+                            oscC.connect(gainC);
+                            gainC.connect(ctx.destination);
+                            oscC.type = 'square';
+                            oscC.frequency.value = 400;
+                            gainC.gain.value = 0.2;
+                            const startTime = ctx.currentTime + i * 0.15;
+                            gainC.gain.exponentialRampToValueAtTime(0.01, startTime + 0.1);
+                            oscC.start(startTime);
+                            oscC.stop(startTime + 0.1);
+                        }
+                        break;
+                        
+                    case 'whoosh':
+                        const oscW = ctx.createOscillator();
+                        const gainW = ctx.createGain();
+                        oscW.connect(gainW);
+                        gainW.connect(ctx.destination);
+                        oscW.type = 'sine';
+                        oscW.frequency.setValueAtTime(200, ctx.currentTime);
+                        oscW.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.3);
+                        gainW.gain.value = 0.2;
+                        gainW.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                        oscW.start(ctx.currentTime);
+                        oscW.stop(ctx.currentTime + 0.3);
+                        break;
+                        
+                    case 'jump':
+                        for (let i = 0; i < 3; i++) {
+                            const oscJ = ctx.createOscillator();
+                            const gainJ = ctx.createGain();
+                            oscJ.connect(gainJ);
+                            gainJ.connect(ctx.destination);
+                            oscJ.type = 'sine';
+                            oscJ.frequency.setValueAtTime(300, ctx.currentTime + i * 0.25);
+                            oscJ.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + i * 0.25 + 0.15);
+                            gainJ.gain.value = 0.2;
+                            gainJ.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.25 + 0.15);
+                            oscJ.start(ctx.currentTime + i * 0.25);
+                            oscJ.stop(ctx.currentTime + i * 0.25 + 0.15);
+                        }
+                        break;
+                        
+                    case 'wave':
+                        const oscWa = ctx.createOscillator();
+                        const gainWa = ctx.createGain();
+                        oscWa.connect(gainWa);
+                        gainWa.connect(ctx.destination);
+                        oscWa.type = 'sine';
+                        oscWa.frequency.setValueAtTime(500, ctx.currentTime);
+                        oscWa.frequency.exponentialRampToValueAtTime(700, ctx.currentTime + 0.5);
+                        gainWa.gain.value = 0.2;
+                        gainWa.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                        oscWa.start(ctx.currentTime);
+                        oscWa.stop(ctx.currentTime + 0.5);
+                        break;
+                        
+                    case 'sit':
+                        const oscS = ctx.createOscillator();
+                        const gainS = ctx.createGain();
+                        oscS.connect(gainS);
+                        gainS.connect(ctx.destination);
+                        oscS.type = 'sine';
+                        oscS.frequency.setValueAtTime(400, ctx.currentTime);
+                        oscS.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.3);
+                        gainS.gain.value = 0.2;
+                        gainS.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                        oscS.start(ctx.currentTime);
+                        oscS.stop(ctx.currentTime + 0.3);
+                        break;
+                        
+                    case 'stand':
+                        const oscSt = ctx.createOscillator();
+                        const gainSt = ctx.createGain();
+                        oscSt.connect(gainSt);
+                        gainSt.connect(ctx.destination);
+                        oscSt.type = 'sine';
+                        oscSt.frequency.setValueAtTime(200, ctx.currentTime);
+                        oscSt.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.3);
+                        gainSt.gain.value = 0.2;
+                        gainSt.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                        oscSt.start(ctx.currentTime);
+                        oscSt.stop(ctx.currentTime + 0.3);
+                        break;
+                }
+                
+                setTimeout(() => ctx.close(), 1000);
+            } catch (e) {}
+        }
+
+        // ================================================================
+        //  ЗВУК ПРОКРУТКИ КУБИКА (Web Audio API)
+        // ================================================================
+        function playDiceRollSound() {
+            try {
+                const ctx = new(window.AudioContext || window.webkitAudioContext)();
+
+                for (let i = 0; i < 10; i++) {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'square';
+                    osc.frequency.value = 600 + Math.random() * 400;
+                    gain.gain.value = 0.1;
+                    const startTime = ctx.currentTime + i * 0.08;
+                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.06);
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.06);
+                }
+
+                setTimeout(() => {
+                    const osc2 = ctx.createOscillator();
+                    const gain2 = ctx.createGain();
+                    osc2.connect(gain2);
+                    gain2.connect(ctx.destination);
+                    osc2.type = 'sine';
+                    osc2.frequency.value = 800;
+                    gain2.gain.value = 0.3;
+                    gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc2.start(ctx.currentTime);
+                    osc2.stop(ctx.currentTime + 0.3);
+                }, 900);
+
+                setTimeout(() => ctx.close(), 2000);
+            } catch (e) {}
+        }
+
+        // ================================================================
+        //  ОЗВУЧКА (Web Speech API)
+        // ================================================================
+        function speakCommand(text, callback) {
+            speechSynth.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.85;
+            utterance.pitch = 1.3;
+            utterance.volume = 1.0;
+
+            const voices = speechSynth.getVoices();
+            const preferredVoice = voices.find(voice => 
+                voice.lang === 'en-US' && 
+                (voice.name.includes('Google US English') || 
+                 voice.name.includes('Samantha') || 
+                 voice.name.includes('Female') ||
+                 voice.name.includes('Zira'))
+            );
+            
+            if (preferredVoice) {
+                utterance.voice = preferredVoice;
+            }
+
+            utterance.onend = () => {
+                if (callback) callback();
+            };
+
+            speechSynth.speak(utterance);
+        }
+
+        // Обратный отсчёт - медленно и чётко
+        function speakCountdownNumber(number, callback) {
+            speechSynth.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(number);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.7;         // МЕДЛЕННЕЕ для чёткости
+            utterance.pitch = 1.2;        // Приятный тон
+            utterance.volume = 1.0;
+
+            const voices = speechSynth.getVoices();
+            const preferredVoice = voices.find(voice => 
+                voice.lang === 'en-US' && 
+                (voice.name.includes('Google US English') || 
+                 voice.name.includes('Samantha') || 
+                 voice.name.includes('Female') ||
+                 voice.name.includes('Zira'))
+            );
+            
+            if (preferredVoice) {
+                utterance.voice = preferredVoice;
+            }
+
+            utterance.onend = () => {
+                if (callback) callback();
+            };
+
+            speechSynth.speak(utterance);
+        }
+
+        // ================================================================
+        //  ВЫБОР СЛУЧАЙНОГО ЗАДАНИЯ БЕЗ ПОВТОРЕНИЙ
+        // ================================================================
+        function getRandomCommand() {
+            let availableCommands = [];
+            
+            if (commandRepeatCount >= 2 && lastCommandIndex !== -1) {
+                availableCommands = commands.filter((_, index) => index !== lastCommandIndex);
+            } else {
+                availableCommands = commands;
+            }
+            
+            const randomIndex = Math.floor(Math.random() * availableCommands.length);
+            const selectedCommand = availableCommands[randomIndex];
+            const originalIndex = commands.indexOf(selectedCommand);
+            
+            if (originalIndex === lastCommandIndex) {
+                commandRepeatCount++;
+            } else {
+                commandRepeatCount = 1;
+                lastCommandIndex = originalIndex;
+            }
+            
+            return selectedCommand;
+        }
+
+        // ================================================================
+        //  ВИДЕО С БАНАНОМ (20 секунд: 10 вперёд + 10 назад)
+        // ================================================================
+        function startBananaVideo() {
+            bananaVideo.classList.add('active');
+            bananaVideo.currentTime = 0;
+            isVideoPlayingForward = true;
+            bananaVideo.playbackRate = 1;
+            
+            bananaVideo.play().catch(() => {
+                hideBananaVideo();
+            });
+
+            videoReverseTimeout = setTimeout(() => {
+                if (isDancing) {
+                    isVideoPlayingForward = false;
+                    bananaVideo.playbackRate = -1;
+                    bananaVideo.play();
+                }
+            }, 10000);
+        }
+
+        function hideBananaVideo() {
+            bananaVideo.classList.remove('active');
+            bananaVideo.pause();
+            bananaVideo.currentTime = 0;
+            if (videoReverseTimeout) {
+                clearTimeout(videoReverseTimeout);
+                videoReverseTimeout = null;
+            }
+            if (videoEndTimeout) {
+                clearTimeout(videoEndTimeout);
+                videoEndTimeout = null;
+            }
+        }
+
+        // ================================================================
+        //  МУЗЫКА (20 секунд)
+        // ================================================================
+        function startDanceMusic() {
+            audioPlayer = new Audio('dance.mp3');
+            audioPlayer.loop = true;
+            audioPlayer.volume = 0.9;
+
+            audioPlayer.play().catch(() => {
+                generateBeat();
+            });
+
+            startBananaVideo();
+
+            danceTimeout = setTimeout(() => {
+                stopDanceMusic();
+            }, 20000);
+        }
+
+        function generateBeat() {
+            audioContext = new(window.AudioContext || window.webkitAudioContext)();
+            let beatCount = 0;
+            
+            danceInterval = setInterval(() => {
+                if (!audioContext) return;
+
+                if (beatCount % 4 === 0) {
+                    const oscBass = audioContext.createOscillator();
+                    const gainBass = audioContext.createGain();
+                    oscBass.connect(gainBass);
+                    gainBass.connect(audioContext.destination);
+                    oscBass.type = 'sine';
+                    oscBass.frequency.setValueAtTime(150, audioContext.currentTime);
+                    oscBass.frequency.exponentialRampToValueAtTime(50, audioContext.currentTime + 0.1);
+                    gainBass.gain.value = 0.4;
+                    gainBass.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+                    oscBass.start(audioContext.currentTime);
+                    oscBass.stop(audioContext.currentTime + 0.15);
+                }
+                
+                const oscHat = audioContext.createOscillator();
+                const gainHat = audioContext.createGain();
+                oscHat.connect(gainHat);
+                gainHat.connect(audioContext.destination);
+                oscHat.type = 'square';
+                oscHat.frequency.value = 2000;
+                gainHat.gain.value = 0.05;
+                gainHat.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
+                oscHat.start(audioContext.currentTime);
+                oscHat.stop(audioContext.currentTime + 0.05);
+                
+                if (beatCount % 2 === 0) {
+                    const oscMel = audioContext.createOscillator();
+                    const gainMel = audioContext.createGain();
+                    oscMel.connect(gainMel);
+                    gainMel.connect(audioContext.destination);
+                    oscMel.type = 'triangle';
+                    oscMel.frequency.value = [523, 587, 659, 784][Math.floor(beatCount / 2) % 4];
+                    gainMel.gain.value = 0.15;
+                    gainMel.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                    oscMel.start(audioContext.currentTime);
+                    oscMel.stop(audioContext.currentTime + 0.2);
+                }
+
+                beatCount++;
+            }, 250);
+        }
+
+        function stopDanceMusic() {
+            hideBananaVideo();
+
+            if (audioPlayer) {
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+                audioPlayer = null;
+            }
+
+            if (danceInterval) {
+                clearInterval(danceInterval);
+                danceInterval = null;
+            }
+
+            if (danceTimeout) {
+                clearTimeout(danceTimeout);
+                danceTimeout = null;
+            }
+
+            if (audioContext) {
+                audioContext.close();
+                audioContext = null;
+            }
+
+            isDancing = false;
+            stopBtn.style.display = 'none';
+            diceDisplay.classList.remove('dance-time');
+            diceDisplay.style.display = 'flex'; // Показываем dice-display снова
+            diceDisplay.textContent = '🎲 Roll the dice!';
+        }
+
+        // ================================================================
+        //  ОБРАТНЫЙ ОТСЧЁТ
+        // ================================================================
+        function countdown(callback) {
+            diceDisplay.style.display = 'flex'; // Показываем dice-display для отсчёта
+            diceDisplay.classList.add('countdown');
+            diceDisplay.textContent = '3';
+            speakCountdownNumber('Three!', () => {
+                setTimeout(() => {
+                    diceDisplay.textContent = '2';
+                    speakCountdownNumber('Two!', () => {
+                        setTimeout(() => {
+                            diceDisplay.textContent = '1';
+                            speakCountdownNumber('One!', () => {
+                                // После "One!" скрываем dice-display
+                                diceDisplay.classList.remove('countdown');
+                                diceDisplay.style.display = 'none'; // Скрываем dice-display
+                                callback(); // Запускаем видео и музыку
+                            });
+                        }, 300); // Небольшая пауза между цифрами
+                    });
+                }, 300);
+            });
+        }
+
+        // ================================================================
+        //  КУБИК
+        // ================================================================
+        rollDiceBtn.addEventListener('click', function() {
+            if (isRolling || isDancing) return;
+
+            isRolling = true;
+            diceDisplay.style.display = 'flex'; // Показываем dice-display
+            diceDisplay.classList.add('rolling');
+            diceDisplay.textContent = '🎲';
+
+            playDiceRollSound();
+
+            setTimeout(() => {
+                diceDisplay.classList.remove('rolling');
+
+                const isDance = Math.random() < 0.5;
+
+                if (isDance) {
+                    diceDisplay.textContent = '🎵🎉';
+                    diceDisplay.classList.add('dance-time');
+                    speakCommand('Dance time!', () => {
+                        countdown(() => {
+                            isDancing = true;
+                            stopBtn.style.display = 'inline-flex';
+                            startDanceMusic();
+                        });
+                    });
+                } else {
+                    const randomCommand = getRandomCommand();
+                    diceDisplay.textContent = randomCommand.emoji + ' ' + randomCommand.text;
+                    
+                    speakCommand(randomCommand.text, () => {
+                        playCommandSound(randomCommand.sound);
+                        isRolling = false;
+                    });
+                    
+                    setTimeout(() => {
+                        isRolling = false;
+                    }, 4000);
+                }
+
+                isRolling = false;
+            }, 1200);
+        });
+
+        stopBtn.addEventListener('click', function() {
+            speechSynth.cancel();
+            stopDanceMusic();
+            diceDisplay.style.display = 'flex'; // Показываем dice-display
+            diceDisplay.textContent = '🎲 Roll the dice!';
+            isRolling = false;
+        });
+
+        window.addEventListener('beforeunload', function() {
+            speechSynth.cancel();
+            stopDanceMusic();
+        });
+
+        // Загружаем голоса заранее
+        window.addEventListener('load', function() {
+            if (speechSynth) {
+                speechSynth.getVoices();
+            }
+        });
+    </script>
+
+</body>
+</html>
